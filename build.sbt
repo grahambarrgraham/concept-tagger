@@ -7,5 +7,5 @@ scalaVersion := "2.11.8"
 
 logBuffered in Test := false
 
-libraryDependencies ++= Dependencies.logging ++ Dependencies.test ++ Dependencies.akka
+libraryDependencies ++= Dependencies.logging ++ Dependencies.test ++ Dependencies.akka ++ Dependencies.nlp
 

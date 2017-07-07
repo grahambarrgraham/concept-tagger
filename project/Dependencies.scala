@@ -32,6 +32,10 @@ object Dependencies {
     Modules.ScalaMock
   )
 
+  final val nlp: Seq[ModuleID] = Seq(
+    "org.apache.opennlp" % "opennlp-tools" % "1.8.0"
+  )
+
   final val gatling: Seq[ModuleID] = Seq(
     "io.gatling.highcharts"   % "gatling-charts-highcharts" % "2.2.3" % "test,it",
     "io.gatling"              % "gatling-test-framework"    % "2.2.3" % "test,it"
