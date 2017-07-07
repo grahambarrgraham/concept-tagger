@@ -2,9 +2,9 @@ package concept
 
 import org.scalatest.{FlatSpec, Matchers}
 
-class ConceptTaggerTest extends FlatSpec with Matchers {
+class NlpExtractorWithTrivialMatchingTaggerTest extends FlatSpec with Matchers {
 
-  val tagger: ConceptTagger = new SentenceConceptTagger
+  val tagger: ConceptTagger = new NlpExtractorWithTrivialMatchingTagger
 
   "I would like some thai food" should "match Thai concept" in {
     tagger.findTags("I would like some thai food") should contain only "Thai"

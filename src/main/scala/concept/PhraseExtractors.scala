@@ -6,25 +6,21 @@ import opennlp.tools.cmdline.parser.ParserTool
 import opennlp.tools.parser.{Parse, Parser, ParserFactory, ParserModel}
 
 
-trait NounPhraseExtractor {
-  def extract(sentence: String): Seq[String]
-}
-
 object OpenNlpNounPhraseExtractor {
-  val TopNParses = 1
-  private val asStream: InputStream = getClass.getClassLoader.getResourceAsStream("en-parser-chunking.bin")
-  val parser: Parser = ParserFactory.create(new ParserModel(asStream))
+  val parser: Parser =
+    ParserFactory.create(new ParserModel(getClass.getClassLoader.getResourceAsStream("en-parser-chunking.bin")))
 }
 
-class OpenNlpNounPhraseExtractor extends NounPhraseExtractor {
-
+class OpenNlpNounPhraseExtractor extends PhraseExtractor {
   import OpenNlpNounPhraseExtractor._
 
-  def extract(sentence: String): Seq[String] = traverseParseTree(parseLine(sentence))
+  private val NounPhrase = "NP"
+
+  def extractNounPhrases(sentence: String): Seq[String] = traverseParseTree(parseLine(sentence))
 
   //@tailrec
   private def traverseParseTree(parses: List[Parse]): List[String] = parses match {
-    case (head: Parse) :: tail if head.getType == "NP" =>
+    case (head: Parse) :: tail if head.getType == NounPhrase =>
       head.getCoveredText :: traverseParseTree(head.getChildren.toList) ::: traverseParseTree(tail)
     case (head: Parse) :: tail =>
       traverseParseTree(head.getChildren.toList) ::: traverseParseTree(tail)
@@ -32,8 +28,12 @@ class OpenNlpNounPhraseExtractor extends NounPhraseExtractor {
   }
 
   private def parseLine(sentence: String) = {
+    val TopNParses = 1
     ParserTool.parseLine(sentence, parser, TopNParses).toList
   }
 
 }
 
+class TrivialPhraseExtractor extends PhraseExtractor {
+  def extractNounPhrases(sentence: String): Seq[String] = Seq(sentence)
+}
