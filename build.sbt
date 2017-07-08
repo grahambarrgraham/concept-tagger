@@ -9,5 +9,10 @@ logBuffered in Test := false
 
 fork in Test := true
 
+parallelExecution in Test := false
+
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+
 libraryDependencies ++= Dependencies.logging ++ Dependencies.test ++ Dependencies.akka ++ Dependencies.nlp
 
+testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")

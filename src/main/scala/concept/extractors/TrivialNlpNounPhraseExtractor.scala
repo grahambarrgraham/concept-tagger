@@ -1,18 +1,17 @@
-package concept
+package concept.extractors
 
-import java.io.InputStream
-
+import concept.PhraseExtractor
 import opennlp.tools.cmdline.parser.ParserTool
 import opennlp.tools.parser.{Parse, Parser, ParserFactory, ParserModel}
 
 
-object OpenNlpNounPhraseExtractor {
+object TrivialNlpNounPhraseExtractor {
   val parser: Parser =
     ParserFactory.create(new ParserModel(getClass.getClassLoader.getResourceAsStream("en-parser-chunking.bin")))
 }
 
-class OpenNlpNounPhraseExtractor extends PhraseExtractor {
-  import OpenNlpNounPhraseExtractor._
+class TrivialNlpNounPhraseExtractor extends PhraseExtractor {
+  import TrivialNlpNounPhraseExtractor._
 
   private val NounPhrase = "NP"
 
@@ -34,6 +33,3 @@ class OpenNlpNounPhraseExtractor extends PhraseExtractor {
 
 }
 
-class TrivialPhraseExtractor extends PhraseExtractor {
-  def extractNounPhrases(sentence: String): Seq[String] = Seq(sentence)
-}

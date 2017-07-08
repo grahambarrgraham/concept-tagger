@@ -12,6 +12,7 @@ object Modules {
   final val Scalactic: ModuleID = "org.scalactic"   %% "scalactic" % Versions.scalaTest
   final val ScalaMock: ModuleID = "org.scalamock" %% "scalamock-scalatest-support"  % "3.5.0" % Test
   final val ScalaLogging: ModuleID = "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0"
+  final val ScalaMeter: ModuleID = "com.storm-enroute" %% "scalameter" % "0.9-SNAPSHOT" % Test
 }
 
 object Dependencies {
