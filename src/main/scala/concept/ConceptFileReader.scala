@@ -2,7 +2,7 @@ package concept
 
 import scala.io.{BufferedSource, Source}
 import scala.util.Try
-
+import scala.language.reflectiveCalls
 
 /**
   * Created by graham on 08/07/2017.

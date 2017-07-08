@@ -3,9 +3,10 @@ package concept
 import concept.concepttaggers.TrivialConceptTagger
 import concept.extractors.{TrivialNlpNounPhraseExtractor, TrivialPhraseExtractor}
 import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{FlatSpec, Matchers, WordSpec}
 
-trait TaggerBehaviours { this: FlatSpec with Matchers =>
+trait TaggerBehaviours {
+  this: FlatSpec with Matchers =>
 
   def basicBehaviours(workflow: Workflow) {
 

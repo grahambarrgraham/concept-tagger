@@ -8,7 +8,7 @@ trait ConceptTagger {
 }
 
 trait PhraseExtractor {
-  def extractNounPhrases(sentence: String): Seq[String]
+  def extractNounPhrases(sentence: String): Set[String]
 }
 
 sealed trait Mode
