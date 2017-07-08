@@ -1,37 +1,25 @@
 package concept
 
+import concept.concepttaggers.TrivialConceptTagger
+import concept.extractors.{TrivialNlpNounPhraseExtractor, TrivialPhraseExtractor}
 import org.scalatest.{FlatSpec, Matchers}
 
-class TrivialTaggerTest extends FlatSpec with Matchers {
+class TrivialTaggerTest extends FlatSpec with Matchers with TaggerBehaviours {
 
-  val tagger: ConceptTagger = new TrivialMatchingConceptTagger
+  val trivialWorkflow: Workflow = Workflow(
+    new TrivialPhraseExtractor,
+    new TrivialConceptTagger,
+    "tinyconceptlist.txt", Sequential)
 
-  "I would like some thai food" should "match Thai concept" in {
-    tagger.findTags("I would like some thai food") should contain only "Thai"
-  }
+  val trivialNlpWorkflowTinySetSequential: Workflow = Workflow(
+    new TrivialNlpNounPhraseExtractor,
+    new TrivialConceptTagger,
+    "tinyconceptlist.txt", Sequential)
 
-  "Where can I find good sushi" should "match Sushi concept" in {
-    tagger.findTags("Where can I find good sushi") should contain only "Sushi"
-  }
+  "A trivial workflow" should
+    behave like basicBehaviours(trivialWorkflow)
 
-  "Find me a place that does tapas" should "match nothing" in {
-    tagger.findTags("Find me a place that does tapas") shouldBe empty
-  }
-
-  "Which restaurants do East Asian food" should "match East Asian" in {
-    tagger.findTags("Which restaurants do East Asian food") should contain only "East Asian"
-  }
-
-  "Which restaurants do West Indian food" should "match Indian and West Indian" in {
-    tagger.findTags("Which restaurants do West Indian food") should contain only ("West Indian", "Indian")
-  }
-
-  "What is the weather like today" should "match nothing" in {
-    tagger.findTags("What is the weather like today") shouldBe empty
-  }
-
-  "Which restaurants do West or East Indian food or Sushi" should "match Indian and East Indian and Sushi" in {
-    tagger.findTags("Which restaurants do East or West Indian food or Spanish Sushi") should contain only ("West Indian", "Indian", "Sushi", "Spanish")
-  }
+  "A workflow with trivial Nlp Noun Phrase Extraction and sequential matching" should
+    behave like basicBehaviours(trivialNlpWorkflowTinySetSequential)
 
 }

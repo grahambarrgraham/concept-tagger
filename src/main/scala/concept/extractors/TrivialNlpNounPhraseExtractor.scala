@@ -6,8 +6,8 @@ import opennlp.tools.parser.{Parse, Parser, ParserFactory, ParserModel}
 
 
 object TrivialNlpNounPhraseExtractor {
-  val parser: Parser =
-    ParserFactory.create(new ParserModel(getClass.getClassLoader.getResourceAsStream("en-parser-chunking.bin")))
+  private val model: ParserModel = new ParserModel(getClass.getClassLoader.getResourceAsStream("en-parser-chunking.bin"))
+  def parser: Parser = ParserFactory.create(model)
 }
 
 class TrivialNlpNounPhraseExtractor extends PhraseExtractor {
@@ -15,20 +15,25 @@ class TrivialNlpNounPhraseExtractor extends PhraseExtractor {
 
   private val NounPhrase = "NP"
 
-  def extractNounPhrases(sentence: String): Seq[String] = traverseParseTree(parseLine(sentence))
+  def extractNounPhrases(sentence: String): Set[String] =
+    traverseParseTree(parseLine(sentence))
+      .map{p => p.show(); p}
+      .map(p => p.getCoveredText)
+      .toSet
+      .filterNot(p => Seq("i", "me", sentence.toLowerCase).contains(p.toLowerCase))
 
   //@tailrec
-  private def traverseParseTree(parses: List[Parse]): List[String] = parses match {
+  private def traverseParseTree(parses: List[Parse]): List[Parse] = parses match {
     case (head: Parse) :: tail if head.getType == NounPhrase =>
-      head.getCoveredText :: traverseParseTree(head.getChildren.toList) ::: traverseParseTree(tail)
+      head :: traverseParseTree(head.getChildren.toList) ::: traverseParseTree(tail)
     case (head: Parse) :: tail =>
       traverseParseTree(head.getChildren.toList) ::: traverseParseTree(tail)
     case Nil => List.empty
   }
 
   private def parseLine(sentence: String) = {
-    val TopNParses = 1
-    ParserTool.parseLine(sentence, parser, TopNParses).toList
+    val TopnParses = 1
+    ParserTool.parseLine(sentence, parser, TopnParses).toList
   }
 
 }

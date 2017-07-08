@@ -1,7 +1,6 @@
 package concept
 
 import scala.collection.parallel.ParSeq
-import scala.collection.parallel.immutable.ParVector
 
 trait ConceptTagger {
   def findTagsSequential(phrase: String, tags: Seq[String]): Seq[String]
@@ -13,15 +12,15 @@ trait PhraseExtractor {
 }
 
 sealed trait Mode
-final case object Parallel extends Mode
-final case object Sequential extends Mode
+case object Parallel extends Mode
+case object Sequential extends Mode
 
 case class Workflow(extractor: PhraseExtractor, tagger: ConceptTagger, conceptFile: String, mode: Mode) {
 
   val conceptList: Seq[String] = ConceptFileReader.readLines(conceptFile).get
   val parallelConceptList: ParSeq[String] = ConceptFileReader.readLines(conceptFile).get.par
 
-  def getConceptTags(sentence: String, mode: Mode): Set[String] = mode match {
+  def getConceptTags(sentence: String): Set[String] = mode match {
     case Parallel => getConceptTagsParallel(sentence)
     case Sequential => getConceptTagsSequential(sentence)
   }

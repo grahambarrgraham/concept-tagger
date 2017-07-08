@@ -1,7 +1,6 @@
 package concept.concepttaggers
 
-import concept.extractors.TrivialPhraseExtractor
-import concept.{ConceptTagger, PhraseExtractor, TrivialMatchingConceptTagger}
+import concept.ConceptTagger
 
 import scala.collection.parallel.ParSeq
 
@@ -10,11 +9,11 @@ import scala.collection.parallel.ParSeq
   */
 class TrivialConceptTagger extends ConceptTagger {
 
-  def findTags(phrase: String, tags: Seq[String]): Seq[String] = {
+  def findTagsSequential(phrase: String, tags: Seq[String]): Seq[String] = {
     tags.filter(p => matchTag(phrase, p))
   }
 
-  def findTags(phrase: String, tags: ParSeq[String]): ParSeq[String] = {
+  def findTagsParallel(phrase: String, tags: ParSeq[String]): ParSeq[String] = {
     tags.filter(p => matchTag(phrase, p))
   }
 
