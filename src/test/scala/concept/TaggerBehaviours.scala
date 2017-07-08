@@ -1,9 +1,6 @@
 package concept
 
-import concept.concepttaggers.TrivialConceptTagger
-import concept.extractors.{TrivialNlpNounPhraseExtractor, TrivialPhraseExtractor}
-import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.{FlatSpec, Matchers, WordSpec}
+import org.scalatest.{FlatSpec, Matchers}
 
 trait TaggerBehaviours {
   this: FlatSpec with Matchers =>

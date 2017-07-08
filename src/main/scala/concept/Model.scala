@@ -1,24 +1,19 @@
 package concept
 
-import scala.collection.parallel.ParSeq
-
-trait ConceptTagger {
-  def findTagsSequential(phrase: String, tags: Seq[String]): Seq[String]
-  def findTagsParallel(phrase: String, tags: ParSeq[String]): ParSeq[String]
-}
+import scala.collection.parallel.ParSet
 
 trait PhraseExtractor {
-  def extractNounPhrases(sentence: String): Set[String]
+  def extractPhrases(sentence: String): Set[String]
 }
 
 sealed trait Mode
 case object Parallel extends Mode
 case object Sequential extends Mode
 
-case class Workflow(extractor: PhraseExtractor, tagger: ConceptTagger, conceptFile: String, mode: Mode) {
+case class Workflow(extractor: PhraseExtractor, conceptFile: String, mode: Mode) {
 
-  val conceptList: Seq[String] = ConceptFileReader.readLines(conceptFile).get
-  val parallelConceptList: ParSeq[String] = ConceptFileReader.readLines(conceptFile).get.par
+  val conceptSet: Set[String] = ConceptFileReader.readLines(conceptFile).get.map(l => l.toLowerCase).toSet
+  val parallelConceptSet: ParSet[String] = conceptSet.par
 
   def getConceptTags(sentence: String): Set[String] = mode match {
     case Parallel => getConceptTagsParallel(sentence)
@@ -26,12 +21,10 @@ case class Workflow(extractor: PhraseExtractor, tagger: ConceptTagger, conceptFi
   }
 
   def getConceptTagsSequential(sentence: String): Set[String] =
-    extractor.extractNounPhrases(sentence)
-      .flatMap(phrase => tagger.findTagsSequential(phrase, conceptList)).toSet
+    extractor.extractPhrases(sentence).intersect(conceptSet)
 
   def getConceptTagsParallel(sentence: String): Set[String] =
-    extractor.extractNounPhrases(sentence)
-      .flatMap(phrase => tagger.findTagsParallel(phrase, parallelConceptList)).toSet
+    extractor.extractPhrases(sentence).intersect(parallelConceptSet).seq
 }
 
 

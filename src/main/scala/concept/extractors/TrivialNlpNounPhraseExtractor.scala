@@ -15,7 +15,7 @@ class TrivialNlpNounPhraseExtractor extends PhraseExtractor {
 
   private val NounPhrase = "NP"
 
-  def extractNounPhrases(sentence: String): Set[String] =
+  def extractPhrases(sentence: String): Set[String] =
     traverseParseTree(parseLine(sentence))
       .map{p => p.show(); p}
       .map(p => p.getCoveredText)
