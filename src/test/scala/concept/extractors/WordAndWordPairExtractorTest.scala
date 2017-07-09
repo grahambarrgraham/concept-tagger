@@ -25,4 +25,12 @@ class WordAndWordPairExtractorTest extends FlatSpec with Matchers {
     extractor.extractPhrases("hello world again") should contain only ("hello", "hello world", "world", "world again", "again")
   }
 
+  "four strings" should "return 7 options" in {
+    extractor.extractPhrases("hello world again dear") should contain only ("hello", "hello world", "world", "world again", "again", "again dear", "dear")
+  }
+
+  "two strings with various whitespace" should "return 3 options" in {
+    extractor.extractPhrases("  hello    world  ") should contain only ("hello", "hello world", "world")
+  }
+
 }

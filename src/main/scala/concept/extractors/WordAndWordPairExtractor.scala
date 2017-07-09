@@ -8,6 +8,7 @@ import scala.annotation.tailrec
   * Created by graham on 08/07/2017.
   */
 class WordAndWordPairExtractor extends PhraseExtractor {
+
   def extractPhrases(sentence: String): Set[String] = {
     val singleWords = sentence.trim.split(" +").filterNot(s => s == "").toList
     (twoWordPhrases(singleWords) ::: singleWords).toSet
