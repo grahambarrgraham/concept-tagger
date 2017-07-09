@@ -65,31 +65,35 @@ trait Behaviours {
 
   def benchmark(workflow: Workflow, iterations: Int) {
 
-    s"$workflow Benchmark" {
+    def workflows = {
+      workflow.getConceptTags("Which restaurants do East Asian food") should contain("East Asian")
+      workflow.getConceptTags("I would like some thai food") should contain("Thai")
+      workflow.getConceptTags("Where can I find good sushi") should contain("Sushi")
+      workflow.getConceptTags("MZZZ anyd wiiiz cannndot beee sessses") shouldBe empty
+      workflow.getConceptTags("Which restaurants do West Indian food") should contain allOf("West Indian", "Indian")
+      workflow.getConceptTags("Which restaurants do East or West Indian food or Spanish Sushi") should contain allOf("West Indian", "Indian", "Sushi", "Spanish")
+    }
 
-      1 to 2 foreach { _ =>
-        workflow.getConceptTags("Which restaurants do East Asian food") should contain("East Asian")
-        workflow.getConceptTags("I would like some thai food") should contain("Thai")
-        workflow.getConceptTags("Where can I find good sushi") should contain("Sushi")
-        workflow.getConceptTags("MZZZ anyd wiiiz cannndot beee sessses") shouldBe empty
-        workflow.getConceptTags("Which restaurants do West Indian food") should contain allOf("West Indian", "Indian")
-        workflow.getConceptTags("Which restaurants do East or West Indian food or Spanish Sushi") should contain allOf("West Indian", "Indian", "Sushi", "Spanish")
-      }
+    def warmup = 1 to 2 foreach { _ => workflows}
+    def sequentialTest = () => 1 to iterations foreach { _ => workflows }
+    def concurrentTests = () => (1 to iterations).par.foreach { _ => workflows }
 
+    def runBenchmark(testFunction: () => Unit, description: String) = {
+      warmup
       val now = System.currentTimeMillis()
+      testFunction()
+      println(s"$description : $workflow took ${System.currentTimeMillis() - now} ms for $iterations iterations")
+    }
 
-      1 to iterations foreach { _ =>
-        workflow.getConceptTags("Which restaurants do East Asian food") should contain("East Asian")
-        workflow.getConceptTags("I would like some thai food") should contain("Thai")
-        workflow.getConceptTags("Where can I find good sushi") should contain("Sushi")
-        workflow.getConceptTags("MZZZ anyd wiiiz cannndot beee sessses") shouldBe empty
-        workflow.getConceptTags("Which restaurants do West Indian food") should contain allOf("West Indian", "Indian")
-        workflow.getConceptTags("Which restaurants do East or West Indian food or Spanish Sushi") should contain allOf("West Indian", "Indian", "Sushi", "Spanish")
-      }
-
-      val elapsedTime = System.currentTimeMillis() - now
-      println(s"$workflow took $elapsedTime ms for $iterations iterations")
+    s"$workflow Benchmark Concurrent" {
+      runBenchmark(concurrentTests, "concurrent")
       0
     }
+
+    s"$workflow Benchmark Sequential" {
+      runBenchmark(sequentialTest, "sequential")
+      0
+    }
+
   }
 }

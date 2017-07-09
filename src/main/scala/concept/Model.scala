@@ -24,7 +24,7 @@ case class Workflow(extractor: PhraseExtractor, conceptFile: String, mode: Mode)
     extractor.extractPhrases(sentence).flatMap(phrase => conceptMap.get(phrase.toLowerCase))
 
   def getConceptTagsParallel(sentence: String): Set[String] =
-    extractor.extractPhrases(sentence).par.flatMap(phrase => parallelConceptMap.get(phrase.toLowerCase)).seq
+    extractor.extractPhrases(sentence).par.flatMap(phrase => conceptMap.get(phrase.toLowerCase)).seq
 
   private def readConcepts = {
     ConceptFileReader.readLines(conceptFile).get
