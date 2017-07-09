@@ -21,16 +21,16 @@ case class Workflow(extractor: PhraseExtractor, conceptFile: String, mode: Mode)
   }
 
   def getConceptTagsSequential(sentence: String): Set[String] =
-    extractor.extractPhrases(sentence).map(phrase => conceptMap.get(phrase.toLowerCase)).flatten
+    extractor.extractPhrases(sentence).flatMap(phrase => conceptMap.get(phrase.toLowerCase))
 
   def getConceptTagsParallel(sentence: String): Set[String] =
-    extractor.extractPhrases(sentence).map(phrase => parallelConceptMap.get(phrase.toLowerCase)).flatten
+    extractor.extractPhrases(sentence).par.flatMap(phrase => parallelConceptMap.get(phrase.toLowerCase)).seq
 
   private def readConcepts = {
     ConceptFileReader.readLines(conceptFile).get
   }
 
-  override def toString: String = s"(${mode}-${conceptFile}-${extractor.getClass.getSimpleName}"
+  override def toString: String = s"(${mode}-${conceptFile}-${extractor.getClass.getSimpleName})"
 
 }
 
