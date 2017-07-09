@@ -15,6 +15,6 @@ scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
-libraryDependencies ++= Dependencies.logging ++ Dependencies.test ++ Dependencies.akka ++ Dependencies.nlp
+libraryDependencies ++= Dependencies.logging ++ Dependencies.test ++ Dependencies.nlp
 
 testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")

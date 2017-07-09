@@ -30,7 +30,8 @@ object Dependencies {
 
   final val test: Seq[ModuleID] = Seq(
     Modules.ScalaTest,
-    Modules.ScalaMock
+    Modules.ScalaMock,
+    Modules.ScalaMeter
   )
 
   final val nlp: Seq[ModuleID] = Seq(
