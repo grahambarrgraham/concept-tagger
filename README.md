@@ -46,7 +46,7 @@ There may be benefits in pipe-lining the process, for example with dedicated har
 
 The overall process is basically stateless and so can be horizontally scaled for increased throughput.
 
-## Implementation Notes
+### Implementation Notes
 
 - Unit testing coverage is not 100%, due to lack of time
 - Tail Recursion (@tailrec - the compiler rewrites the code as a traditional loop to avoid stack overflow - 
@@ -55,7 +55,7 @@ but may not be optimal from a performance point of view)
  for concurrent use.   
 - The 35MB OpenNLP model binary should be downloaded as part of the build, not included in the code.
 
-## Performance Testing
+### Performance Testing
 
 All tests : 
 * used an input concept file contain 1M UUIDs plus the handful of test Concepts ("East Asian" etc)
