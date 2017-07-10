@@ -85,6 +85,8 @@ trait Behaviours {
       println(s"$description : $workflow took ${System.currentTimeMillis() - now} ms for $iterations iterations")
     }
 
+    def sentencesPerSecond(timeInMillis: Int, numberOfSentences: Int, numberOfIterations: Int) = (numberOfIterations+numberOfSentences)
+
     s"$workflow Benchmark Concurrent" {
       runBenchmark(concurrentTests, "concurrent")
       0
