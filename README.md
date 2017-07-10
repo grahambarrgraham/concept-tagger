@@ -59,7 +59,7 @@ but may not be optimal from a performance point of view)
 
 All tests : 
 * used an input concept file contain 1M UUIDs plus the handful of test Concepts ("East Asian" etc)
-* used the basic algorithm of take all sub-sequences from the sentence of lengths 1 and 2 (NLP tests also make use of this)
+* used the basic algorithm of deriving all sub-sequences from the sentence of lengths 1 and 2 (NLP tests also make use of this)
 
 The performance test dimentions :
 * Use of NLP parser or not
