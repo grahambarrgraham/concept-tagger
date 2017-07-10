@@ -1,20 +1,20 @@
 
 # concept-tagger
 
-# Prerequistites
+## Prerequistites
 
 - JDK 1.8
 - SBT 
 
-# Usage
+## Usage
 
 ```
 sbt test
 ```
 
-# Notes 
+## Algorithm 
 
-The performance of the concept tagging algorithm is a function of number of words in the sentence (m) and the number of concepts that could be attributed (n).
+The performance of the concept tagging algorithm is a function of the number of words in the sentence (m) and the number of concepts that could be attributed (n).
 
 Given that we expect n to be very large (millions) and m to be small (units/tens) we benefit from indexing the concept list in order 
 to move the algorithm from O(m*n) towards O(m) on average.
@@ -46,7 +46,7 @@ There may be benefits in pipe-lining the process, for example with dedicated har
 
 The overall process is basically stateless and so can be horizontally scaled for increased throughput.
 
-# Implementation Notes
+## Implementation Notes
 
 - Unit testing coverage is not 100%, due to lack of time
 - Tail Recursion (@tailrec - the compiler rewrites the code as a traditional loop to avoid stack overflow - 
@@ -55,7 +55,7 @@ but may not be optimal from a performance point of view)
  for concurrent use.   
 - The 35MB OpenNLP model binary should be downloaded as part of the build, not included in the code.
 
-# Performance Testing
+## Performance Testing
 
 All tests : 
 * used an input concept file contain 1M UUIDs plus the handful of test Concepts ("East Asian" etc)
