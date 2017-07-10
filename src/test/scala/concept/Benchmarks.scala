@@ -25,7 +25,7 @@ trait Benchmarks {
       0
     }
 
-    s"$workflow Benchmark Sequential with short sentences" {
+    s"$workflow Benchmark Sequential with long sentences" {
       runBenchmark(sequentialLargeSentencesTest, "sequential-long-sentences", 1)
       0
     }
