@@ -1,3 +1,4 @@
+
 # concept-tagger
 
 # Prerequistites
@@ -32,8 +33,9 @@ for this test.
 
 ### Parallelisation
 
-The lookup of multiple candidate phrases against the concept Set is implemented Scala (or Java 8) parallel stream operators. 
-By default this will use a global thread-pool sized to the available cores; this would need refinement for concurrent scenarios.
+The lookup of multiple candidate phrases against the concept Set can be implemented using parallel stream operators.  
+By default this will use a global thread-pool sized to the available cores; this would need refinement for concurrent scenarios. 
+However I wasn't able to demonstrate a performance uplift with this mechanism, see Testing section later.
   
 ### Concurrency
 
@@ -44,7 +46,7 @@ There may be benefits in pipe-lining the process, for example with dedicated har
 
 The overall process is basically stateless and so can be horizontally scaled easily. 
 
-# Implementation
+# Implementation Notes
 
 - Unit testing coverage is not 100%, due to lack of time
 - Tail Recursion (@tailrec - the compiler rewrites the code as a traditional loop to avoid stack overflow - 
@@ -52,3 +54,31 @@ but may not be optimal from a performance point of view)
 - OpenNLP concurrency - it is not clear whether the parser is thread-safe, and so a pool of parsers may be required 
  for concurrent use.   
 - The 35MB OpenNLP model binary should be downloaded as part of the build, not included in the code.
+
+# Performance Testing
+
+All tests : 
+* used an input concept file contain 1M UUIDs plus the handful of test Concepts ("East Asian" etc)
+* used the basic algorithm of take all sub-sequences from the sentence of lengths 1 and 2 (NLP tests also make use of this)
+
+The performance test dimentions :
+* Use of NLP parser or not
+* Use of short or long input sentences
+* Use of a parallel or sequential map function when looking up the concepts
+* Running multiple sentences parses in concurrently or sequence 
+
+The results show :
+* there was no uplift from parallelisation, even for long sentences which was a surprise and would need further investigation.
+* NLP processing is pretty slow
+* the algorithm is very inefficient for long sentences, but performs well for short ones
+
+1. sequential-short-sentences : (Sequential-uuid-1M.txt-WordAndWordPairExtractor) took 921 ms for 70000 sentences. Sentences per second : 76004
+2. concurrent-short-sentences : (Sequential-uuid-1M.txt-WordAndWordPairExtractor) took 1348 ms for 70000 sentences. Sentences per second : 51928
+3. concurrent-short-sentences : (Parallel-uuid-1M.txt-WordAndWordPairExtractor) took 1403 ms for 35000 sentences. Sentences per second : 24946
+4. sequential-short-sentences : (Parallel-uuid-1M.txt-WordAndWordPairExtractor) took 2330 ms for 35000 sentences. Sentences per second : 15021
+5. concurrent-long-sentences : (Sequential-uuid-1M.txt-WordAndWordPairExtractor) took 2500 ms for 500 sentences. Sentences per second : 200
+6. sequential-long-sentences : (Parallel-uuid-1M.txt-WordAndWordPairExtractor) took 518 ms for 100 sentences. Sentences per second : 193
+7. concurrent-long-sentences : (Parallel-uuid-1M.txt-WordAndWordPairExtractor) took 525 ms for 100 sentences. Sentences per second : 190
+8. sequential-long-sentences : (Sequential-uuid-1M.txt-WordAndWordPairExtractor) took 2968 ms for 500 sentences. Sentences per second : 168
+9. concurrent-short-sentences : (Sequential-uuid-1M.txt-NlpNounPhraseExtractor) took 671 ms for 70 sentences. Sentences per second : 104
+10. sequential-short-sentences : (Sequential-uuid-1M.txt-NlpNounPhraseExtractor) took 1013 ms for 70 sentences. Sentences per second : 69
