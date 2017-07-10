@@ -23,7 +23,7 @@ Extracting candidate phrases from the sentence to match to the concept set is ch
  structure may be be complex - consider "East and West Indian" mapping to both concepts "East Indian" and "West Indian".
   
 The test cases provided did not require this level of analysis and it was sufficient to consider only 
-sub-sequences of the sentence of size and 1 and 2.
+sub-sequences of the sentence of size and 1 and 2. The matching algorithm is case-insensitive.
 
 ### Natural Language Processing
 
