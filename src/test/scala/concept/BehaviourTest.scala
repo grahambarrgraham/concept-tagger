@@ -15,21 +15,21 @@ class BehaviourTest extends FlatSpec with Matchers
   val workflowWithNlpLargeConceptSetParallelMap: Workflow = Workflow(new NlpNounPhraseExtractor, "uuid-1M.txt", Parallel)
 
   "A workflow using a simple word and word pair extractor on a small concept set and a sequential map" should
-    behave like smallConceptSetBahaviours(workflowWithSmallConceptSetSequentialMap)
+    behave like conceptTaggingBehaviour(workflowWithSmallConceptSetSequentialMap)
 
   "A workflow using a simple word and word pair extractor on a large concept set and a sequential map" should
-    behave like largeConceptSetBehaviours(workflowWithLargeConceptSetSequentialMap)
+    behave like conceptTaggingBehaviour(workflowWithLargeConceptSetSequentialMap)
 
   "A workflow using a NLP plus word and word pair extractor on a large concept set and a sequential map" should
-    behave like largeConceptSetBehaviours(workflowWithNlpLargeConceptSetSequentialMap)
+    behave like conceptTaggingBehaviour(workflowWithNlpLargeConceptSetSequentialMap)
 
   "A workflow using a simple word and word pair extractor on a small concept set and a parallel map" should
-    behave like smallConceptSetBahaviours(workflowWithSmallConceptSetParallelMap)
+    behave like conceptTaggingBehaviour(workflowWithSmallConceptSetParallelMap)
 
   "A workflow using a simple word and word pair extractor on a large concept set and a parallel map" should
-    behave like largeConceptSetBehaviours(workflowWithLargeConceptSetParallelMap)
+    behave like conceptTaggingBehaviour(workflowWithLargeConceptSetParallelMap)
 
   "A workflow using a NLP plus word and word pair extractor on a large concept set and a parallel map" should
-    behave like largeConceptSetBehaviours(workflowWithNlpLargeConceptSetParallelMap)
+    behave like conceptTaggingBehaviour(workflowWithNlpLargeConceptSetParallelMap)
 
 }
